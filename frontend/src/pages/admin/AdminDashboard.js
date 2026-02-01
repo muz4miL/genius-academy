@@ -41,6 +41,8 @@ import AddClass from './classRelated/AddClass';
 import ClassDetails from './classRelated/ClassDetails';
 import ShowClasses from './classRelated/ShowClasses';
 import AccountMenu from '../../components/AccountMenu';
+import FeeVoucher from './FeeVoucher';
+import Inventory from './Inventory';
 
 const AdminDashboard = () => {
     const [open, setOpen] = useState(false);
@@ -133,6 +135,9 @@ const AdminDashboard = () => {
                         <Route path="/Admin/teachers/choosesubject/:id" element={<ChooseSubject situation="Norm" />} />
                         <Route path="/Admin/teachers/choosesubject/:classID/:teacherID" element={<ChooseSubject situation="Teacher" />} />
                         <Route path="/Admin/teachers/addteacher/:id" element={<AddTeacher />} />
+
+                        <Route path="/Admin/fees" element={<FeeVoucher />} />
+                        <Route path="/Admin/inventory" element={<Inventory />} />
 
                         <Route path="/logout" element={<Logout />} />
                     </Routes>

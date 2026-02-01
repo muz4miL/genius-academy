@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 // const { adminRegister, adminLogIn, deleteAdmin, getAdminDetail, updateAdmin } = require('../controllers/admin-controller.js');
 
-const { adminRegister, adminLogIn, getAdminDetail} = require('../controllers/admin-controller.js');
+const { adminRegister, adminLogIn, getAdminDetail } = require('../controllers/admin-controller.js');
 
 const { sclassCreate, sclassList, deleteSclass, deleteSclasses, getSclassDetail, getSclassStudents } = require('../controllers/class-controller.js');
 const { complainCreate, complainList } = require('../controllers/complain-controller.js');
@@ -115,5 +115,25 @@ router.get("/Subject/:id", getSubjectDetail)
 router.delete("/Subject/:id", deleteSubject)
 router.delete("/Subjects/:id", deleteSubjects)
 router.delete("/SubjectsClass/:id", deleteSubjectsByClass)
+
+const { generateFee, getFeesByClass } = require('../controllers/fee-controller.js');
+const { getSeatsByClass, bookSeat } = require('../controllers/seat-controller.js');
+
+// Fee
+router.post('/GenerateFee', generateFee);
+router.get('/FeeList/:id', getFeesByClass);
+
+// Seat
+router.get('/SeatList/:id', getSeatsByClass);
+router.put('/BookSeat', bookSeat);
+
+const { getInventoryList, addInventoryItem, updateInventoryItem, deleteInventoryItem, getInventoryStats } = require('../controllers/inventory-controller.js');
+
+// Inventory
+router.get('/InventoryList/:id', getInventoryList);
+router.post('/InventoryCreate', addInventoryItem);
+router.put('/Inventory/:id', updateInventoryItem);
+router.delete('/Inventory/:id', deleteInventoryItem);
+router.get('/InventoryStats/:id', getInventoryStats);
 
 module.exports = router;
