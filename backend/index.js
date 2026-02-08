@@ -6,6 +6,11 @@ const dotenv = require("dotenv")
 const app = express()
 const Routes = require("./routes/route.js")
 
+// Phase 2: New Route Imports
+const seatRoutes = require("./routes/seat-routes.js");
+const payrollRoutes = require("./routes/payroll-routes.js");
+const admissionRoutes = require("./routes/admission-routes.js");
+
 const PORT = process.env.PORT || 5000
 
 dotenv.config();
@@ -25,6 +30,11 @@ mongoose
     .catch((err) => console.log("NOT CONNECTED TO NETWORK", err))
 
 app.use('/', Routes);
+
+// Phase 2: Wire New Routes
+app.use('/api/seats', seatRoutes);
+app.use('/api/payroll', payrollRoutes);
+app.use('/api/admission', admissionRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server started at port no. ${PORT}`)
