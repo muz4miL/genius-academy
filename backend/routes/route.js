@@ -117,15 +117,12 @@ router.delete("/Subjects/:id", deleteSubjects)
 router.delete("/SubjectsClass/:id", deleteSubjectsByClass)
 
 const { generateFee, getFeesByClass } = require('../controllers/fee-controller.js');
-const { getSeatsByClass, bookSeat } = require('../controllers/seat-controller.js');
 
 // Fee
 router.post('/GenerateFee', generateFee);
 router.get('/FeeList/:id', getFeesByClass);
 
-// Seat
-router.get('/SeatList/:id', getSeatsByClass);
-router.put('/BookSeat', bookSeat);
+// Note: Seat routes moved to /api/seats (see backend/routes/seat-routes.js)
 
 const { getInventoryList, addInventoryItem, updateInventoryItem, deleteInventoryItem, getInventoryStats } = require('../controllers/inventory-controller.js');
 
