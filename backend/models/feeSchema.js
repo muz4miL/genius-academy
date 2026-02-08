@@ -77,7 +77,7 @@ const feeSchema = new mongoose.Schema({
 
 // Virtual for remaining amount
 feeSchema.virtual('remainingAmount').get(function() {
-    return this.amount - this.paidAmount;
+    return Math.max(0, this.amount - this.paidAmount);
 });
 
 feeSchema.set('toJSON', { virtuals: true });

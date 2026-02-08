@@ -95,7 +95,7 @@ teacherSchema.virtual('remainingPayable').get(function() {
         .filter(adv => adv.month === currentMonth)
         .reduce((sum, adv) => sum + adv.amount, 0);
     
-    return this.baseSalary - currentMonthAdvances;
+    return Math.max(0, this.baseSalary - currentMonthAdvances);
 });
 
 // 🔥 METHOD: Get total advances for a specific month
