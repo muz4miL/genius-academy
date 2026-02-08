@@ -13,6 +13,11 @@ const studentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    gender: {
+        type: String,
+        enum: ['Male', 'Female'],
+        required: true
+    },
     sclassName: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'sclass',
@@ -27,34 +32,10 @@ const studentSchema = new mongoose.Schema({
         type: String,
         default: "Student"
     },
-    examResult: [
-        {
-            subName: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'subject',
-            },
-            marksObtained: {
-                type: Number,
-                default: 0
-            }
-        }
-    ],
-    attendance: [{
-        date: {
-            type: Date,
-            required: true
-        },
-        status: {
-            type: String,
-            enum: ['Present', 'Absent'],
-            required: true
-        },
-        subName: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'subject',
-            required: true
-        }
-    }]
-});
+    currentSession: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'session'
+    }
+}, { timestamps: true });
 
 module.exports = mongoose.model("student", studentSchema);
