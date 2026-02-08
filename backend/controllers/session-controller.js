@@ -37,11 +37,7 @@ const initializeSession = async (req, res) => {
 // Get Active Session
 const getActiveSession = async (req, res) => {
     try {
-        const schoolId = req.user?.schoolId || req.headers['x-school-id'];
-        
-        if (!schoolId) {
-            return res.status(400).json({ message: "School ID is required" });
-        }
+        const schoolId = req.user.schoolId;
         
         const activeSession = await Session.findOne({ 
             school: schoolId, 

@@ -1,10 +1,12 @@
 const Inventory = require('../models/inventorySchema');
 
+// Configuration
+const MIN_STOCK_THRESHOLD = 5;
+
 // Consume Item (Atomic Operation)
 const consumeItem = async (req, res) => {
     try {
         const { itemId, quantity } = req.body;
-        const minThreshold = 5; // Can be from config
         
         // Validation
         if (quantity <= 0) {
@@ -30,7 +32,7 @@ const consumeItem = async (req, res) => {
         }
         
         // Low stock alert
-        const lowStockAlert = item.quantity < minThreshold;
+        const lowStockAlert = item.quantity < MIN_STOCK_THRESHOLD;
         
         res.status(200).json({
             success: true,
@@ -42,7 +44,7 @@ const consumeItem = async (req, res) => {
             },
             alert: lowStockAlert ? {
                 message: `WARNING: Low stock! Only ${item.quantity} units remaining.`,
-                threshold: minThreshold
+                threshold: MIN_STOCK_THRESHOLD
             } : null
         });
     } catch (err) {
@@ -128,17 +130,16 @@ const getInventoryList = async (req, res) => {
 const getLowStock = async (req, res) => {
     try {
         const schoolId = req.user.schoolId;
-        const minThreshold = 5; // Can be from config
         
         const lowStockItems = await Inventory.find({ 
             school: schoolId, 
-            quantity: { $lt: minThreshold } 
+            quantity: { $lt: MIN_STOCK_THRESHOLD } 
         }).sort({ quantity: 1 });
         
         res.status(200).json({
             success: true,
             count: lowStockItems.length,
-            threshold: minThreshold,
+            threshold: MIN_STOCK_THRESHOLD,
             items: lowStockItems
         });
     } catch (err) {
@@ -179,7 +180,7 @@ const getInventoryStats = async (req, res) => {
         const items = await Inventory.find({ school: req.params.id });
 
         const totalValue = items.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
-        const lowStockCount = items.filter(item => item.quantity < 5).length;
+        const lowStockCount = items.filter(item => item.quantity < MIN_STOCK_THRESHOLD).length;
         const totalItems = items.length;
 
         res.send({ totalValue, lowStockCount, totalItems });

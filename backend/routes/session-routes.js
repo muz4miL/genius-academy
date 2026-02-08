@@ -8,7 +8,7 @@ const {
 const { verifyAdmin } = require('../middleware/auth');
 
 router.post('/create', verifyAdmin, initializeSession);
-router.get('/active', getActiveSession);
+router.get('/active', verifyAdmin, getActiveSession);
 router.put('/activate/:sessionId', verifyAdmin, activateSession);
 router.get('/list', verifyAdmin, listSessions);
 
