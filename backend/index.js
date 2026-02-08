@@ -11,6 +11,11 @@ const seatRoutes = require("./routes/seat-routes.js");
 const payrollRoutes = require("./routes/payroll-routes.js");
 const admissionRoutes = require("./routes/admission-routes.js");
 
+// Phase 3: Operational Controllers Route Imports
+const feeRoutes = require("./routes/fee-routes.js");
+const sessionRoutes = require("./routes/session-routes.js");
+const inventoryRoutes = require("./routes/inventory-routes.js");
+
 const PORT = process.env.PORT || 5000
 
 dotenv.config();
@@ -35,6 +40,11 @@ app.use('/', Routes);
 app.use('/api/seats', seatRoutes);
 app.use('/api/payroll', payrollRoutes);
 app.use('/api/admission', admissionRoutes);
+
+// Phase 3: Wire Operational Controllers Routes
+app.use('/api/finance', feeRoutes);
+app.use('/api/session', sessionRoutes);
+app.use('/api/inventory', inventoryRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server started at port no. ${PORT}`)
