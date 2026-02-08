@@ -112,6 +112,8 @@ const promoteToStudent = async (req, res) => {
             // Transaction Safety: Create student with rollback on failure
             
             // Password: Default genius{rollNumber} or custom
+            // NOTE: Default password is predictable - should be communicated securely to student
+            // Consider requiring customPassword in production for better security
             const password = customPassword || `genius${admission.rollNumber}`;
             const salt = await bcrypt.genSalt(10);
             const hashedPass = await bcrypt.hash(password, salt);
@@ -155,7 +157,10 @@ const promoteToStudent = async (req, res) => {
             createdFees.push(admissionFeeRecord);
 
             // 2. Tuition fee (status: Pending)
-            const dueDate = tuitionDueDate ? new Date(tuitionDueDate) : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
+            const DEFAULT_TUITION_DUE_DAYS = 30;
+            const dueDate = tuitionDueDate 
+                ? new Date(tuitionDueDate) 
+                : new Date(Date.now() + DEFAULT_TUITION_DUE_DAYS * 24 * 60 * 60 * 1000);
             const tuitionFeeRecord = await Fee.create({
                 student: student._id,
                 sclass: admission.assignedClass,

@@ -100,7 +100,7 @@ const getTeacherPayroll = async (req, res) => {
             month: currentMonth,
             advances: monthAdvances,
             totalAdvances: totalAdvances,
-            remainingPayable: remainingPayable,
+            remainingPayable: remainingPayable,  // Auto-calculated by virtual: baseSalary - currentMonthAdvances
             salaryFinalized: monthlySalary || null
         });
     } catch (err) {

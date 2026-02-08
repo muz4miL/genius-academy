@@ -24,6 +24,7 @@ const getAvailableSeats = async (req, res) => {
         const allowedSide = student.gender === 'Female' ? 'Left' : 'Right';
 
         // Get available seats filtered by gender
+        // Only return available seats to reduce data transfer
         const seats = await Seat.find({
             sclass: classId,
             session: sessionId,
