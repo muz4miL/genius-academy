@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+const mongoose = require('mongoose');
 
 const teacherSchema = new mongoose.Schema({
     name: {
@@ -32,18 +32,77 @@ const teacherSchema = new mongoose.Schema({
         ref: 'sclass',
         required: true,
     },
-    attendance: [{
+    baseSalary: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    advanceHistory: [{
         date: {
             type: Date,
+            required: true,
+            default: Date.now
+        },
+        amount: {
+            type: Number,
             required: true
         },
-        presentCount: {
+        reason: {
             type: String,
+            default: ""
         },
-        absentCount: {
-            type: String,
+        issuedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'admin'
+        },
+        month: {
+            type: String, // "2026-01" format
+            required: true
+        }
+    }],
+    salaryHistory: [{
+        month: {
+            type: String, // "2026-01" format
+            required: true
+        },
+        baseSalary: {
+            type: Number,
+            required: true
+        },
+        totalAdvances: {
+            type: Number,
+            default: 0
+        },
+        finalPayment: {
+            type: Number,
+            required: true
+        },
+        paidAt: {
+            type: Date,
+            default: Date.now
+        },
+        paidBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'admin'
         }
     }]
-}, { timestamps: true });
+}, { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } });
 
-module.exports = mongoose.model("teacher", teacherSchema)
+// 🔥 VIRTUAL: Auto-calculate remaining payable for current month
+teacherSchema.virtual('remainingPayable').get(function() {
+    const currentMonth = new Date().toISOString().slice(0, 7); // "2026-01"
+    const currentMonthAdvances = this.advanceHistory
+        .filter(adv => adv.month === currentMonth)
+        .reduce((sum, adv) => sum + adv.amount, 0);
+    
+    return Math.max(0, this.baseSalary - currentMonthAdvances);
+});
+
+// 🔥 METHOD: Get total advances for a specific month
+teacherSchema.methods.getTotalAdvances = function(month) {
+    return this.advanceHistory
+        .filter(adv => adv.month === month)
+        .reduce((sum, adv) => sum + adv.amount, 0);
+};
+
+module.exports = mongoose.model("teacher", teacherSchema);
